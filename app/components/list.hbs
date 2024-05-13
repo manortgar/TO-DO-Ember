@@ -1,0 +1,24 @@
+<div>
+    <span>What have to you do?</span>
+    <span>You have to do {{this.arrThing.length}} things</span>
+        <div class="search" >
+            <Input @value={{this.query}} class="light" maxlength="250" /> 
+            <button {{on 'click' this.conditional}}{{on 'click' this.print}} type="button">submit</button>
+
+                        
+        </div>
+       
+</div>
+
+<div class="block">
+    {{#each this.arrThing as |thing|}}
+        <button type="button" class="buttonT" id={{thing.id}} {{on 'click' (fn this.changeStatus thing.id)}}{{on 'click' this.conditional}}{{on 'click' this.print}}>
+            <input type="checkbox" name="" id="input" checked={{thing.status}}>
+            <p class="{{if thing.status "through"}}">{{thing.name}}</p>
+        </button>
+    {{/each}}
+</div>
+<div class="blockH">
+    <button type="button" class="buttonT" {{on 'click' this.removeAll}}>Delete All</button>
+
+</div>
