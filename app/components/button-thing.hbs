@@ -1,1 +1,18 @@
-<button type="button" class="buttonT"><input type="checkbox" name="" id=""><p>{{yield}}</p></button>
+<!--<button
+  type="button"
+  class="buttonT"
+  id={{@thing.id}}
+  {{on "click" (fn @thing.changeStatus thing.id)}}
+  {{on "click" @thing.conditional}}
+  {{on "click" @thing.print}}
+>
+  <input type="checkbox" name="" id="input" checked={{@thing.status}} />
+  <p class="{{if @thing.status 'through'}}">{{@thing.name}}</p>
+</button>-->
+<button
+  type="button"
+  class="buttonT"
+  id={{@thing.id}}
+  {{on "click" (fn @onDoThing @thing.id)}}
+><input type="checkbox" name="" id="input" checked={{@thing.status}} />
+  <p class="{{if @thing.status 'through'}}">{{@thing.name}}</p></button>

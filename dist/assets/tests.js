@@ -268,6 +268,20 @@ define("to-do-list/tests/unit/routes/list-test", ["qunit", "to-do-list/tests/hel
     });
   });
 });
+define("to-do-list/tests/unit/services/local-test", ["qunit", "to-do-list/tests/helpers"], function (_qunit, _helpers) {
+  "use strict";
+
+  0; //eaimeta@70e063a35619d71f0,"qunit",0,"to-do-list/tests/helpers"eaimeta@70e063a35619d71f
+  (0, _qunit.module)('Unit | Service | local', function (hooks) {
+    (0, _helpers.setupTest)(hooks);
+
+    // TODO: Replace this with your real tests.
+    (0, _qunit.test)('it exists', function (assert) {
+      let service = this.owner.lookup('service:local');
+      assert.ok(service);
+    });
+  });
+});
 define('to-do-list/config/environment', [], function() {
   var prefix = 'to-do-list';
 try {

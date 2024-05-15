@@ -38,27 +38,46 @@
   });
   0; //eaimeta@70e063a35619d71f0,"@glimmer/component/-private/ember-component-manager"eaimeta@70e063a35619d71f
 });
-;define("to-do-list/components/button-thing", ["exports", "@ember/component", "@ember/component/template-only", "@ember/template-factory"], function (_exports, _component, _templateOnly, _templateFactory) {
+;define("to-do-list/components/button-thing", ["exports", "@ember/component", "@glimmer/component", "@glimmer/tracking", "@ember/object", "to-do-list/objects/thing", "@ember/template-factory"], function (_exports, _component, _component2, _tracking, _object, _thing, _templateFactory) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
   _exports.default = void 0;
-  0; //eaimeta@70e063a35619d71f0,"@ember/component/template-only",0,"@ember/template-factory",0,"@ember/component"eaimeta@70e063a35619d71f
+  0; //eaimeta@70e063a35619d71f0,"@glimmer/component",0,"@glimmer/tracking",0,"@ember/object",0,"to-do-list/objects/thing",0,"@ember/template-factory",0,"@ember/component"eaimeta@70e063a35619d71f
   const __COLOCATED_TEMPLATE__ = (0, _templateFactory.createTemplateFactory)(
   /*
-    <button type="button" class="buttonT"><input type="checkbox" name="" id=""><p>{{yield}}</p></button>
+    <!--<button
+    type="button"
+    class="buttonT"
+    id={{@thing.id}}
+    {{on "click" (fn @thing.changeStatus thing.id)}}
+    {{on "click" @thing.conditional}}
+    {{on "click" @thing.print}}
+  >
+    <input type="checkbox" name="" id="input" checked={{@thing.status}} />
+    <p class="{{if @thing.status 'through'}}">{{@thing.name}}</p>
+  </button>-->
+  <button
+    type="button"
+    class="buttonT"
+    id={{@thing.id}}
+    {{on "click" (fn @onDoThing @thing.id)}}
+  ><input type="checkbox" name="" id="input" checked={{@thing.status}} />
+    <p class="{{if @thing.status 'through'}}">{{@thing.name}}</p></button>
   */
   {
-    "id": "GoAlNfaU",
-    "block": "[[[10,\"button\"],[14,0,\"buttonT\"],[14,4,\"button\"],[12],[10,\"input\"],[14,3,\"\"],[14,1,\"\"],[14,4,\"checkbox\"],[12],[13],[10,2],[12],[18,1,null],[13],[13]],[\"&default\"],false,[\"button\",\"input\",\"p\",\"yield\"]]",
+    "id": "stcwh7TU",
+    "block": "[[[3,\"<button\\n  type=\\\"button\\\"\\n  class=\\\"buttonT\\\"\\n  id={{@thing.id}}\\n  {{on \\\"click\\\" (fn @thing.changeStatus thing.id)}}\\n  {{on \\\"click\\\" @thing.conditional}}\\n  {{on \\\"click\\\" @thing.print}}\\n>\\n  <input type=\\\"checkbox\\\" name=\\\"\\\" id=\\\"input\\\" checked={{@thing.status}} />\\n  <p class=\\\"{{if @thing.status 'through'}}\\\">{{@thing.name}}</p>\\n</button>\"],[1,\"\\n\"],[11,\"button\"],[24,0,\"buttonT\"],[16,1,[30,1,[\"id\"]]],[24,4,\"button\"],[4,[38,1],[\"click\",[28,[37,2],[[30,2],[30,1,[\"id\"]]],null]],null],[12],[10,\"input\"],[14,3,\"\"],[14,1,\"input\"],[15,\"checked\",[30,1,[\"status\"]]],[14,4,\"checkbox\"],[12],[13],[1,\"\\n  \"],[10,2],[15,0,[29,[[52,[30,1,[\"status\"]],\"through\"]]]],[12],[1,[30,1,[\"name\"]]],[13],[13]],[\"@thing\",\"@onDoThing\"],false,[\"button\",\"on\",\"fn\",\"input\",\"p\",\"if\"]]",
     "moduleName": "to-do-list/components/button-thing.hbs",
     "isStrictMode": false
   });
-  var _default = _exports.default = (0, _component.setComponentTemplate)(__COLOCATED_TEMPLATE__, (0, _templateOnly.default)());
+  class ButtonThingComponent extends _component2.default {}
+  _exports.default = ButtonThingComponent;
+  (0, _component.setComponentTemplate)(__COLOCATED_TEMPLATE__, ButtonThingComponent);
 });
-;define("to-do-list/components/list copy", ["exports", "@glimmer/component", "@glimmer/tracking", "@ember/object", "to-do-list/objects/thing"], function (_exports, _component, _tracking, _object, _thing) {
+;define("to-do-list/components/list-copy", ["exports", "@glimmer/component", "@glimmer/tracking", "@ember/object", "to-do-list/objects/thing"], function (_exports, _component, _tracking, _object, _thing) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -168,15 +187,15 @@
     }
   }), _applyDecoratedDescriptor(_class.prototype, "conditional", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "conditional"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "print", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "print"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "changeStatus", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "changeStatus"), _class.prototype)), _class);
 });
-;define("to-do-list/components/list", ["exports", "@ember/component", "@glimmer/component", "@glimmer/tracking", "@ember/object", "to-do-list/objects/thing", "@ember/template-factory"], function (_exports, _component, _component2, _tracking, _object, _thing, _templateFactory) {
+;define("to-do-list/components/list", ["exports", "@ember/component", "@glimmer/component", "@glimmer/tracking", "@ember/object", "to-do-list/objects/thing", "@ember/service", "@ember/template-factory"], function (_exports, _component, _component2, _tracking, _object, _thing, _service, _templateFactory) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
   _exports.default = void 0;
-  var _class, _descriptor, _descriptor2, _descriptor3;
-  0; //eaimeta@70e063a35619d71f0,"@glimmer/component",0,"@glimmer/tracking",0,"@ember/object",0,"to-do-list/objects/thing",0,"@ember/template-factory",0,"@ember/component"eaimeta@70e063a35619d71f
+  var _class, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+  0; //eaimeta@70e063a35619d71f0,"@glimmer/component",0,"@glimmer/tracking",0,"@ember/object",0,"to-do-list/objects/thing",0,"@ember/service",0,"@ember/template-factory",0,"@ember/component"eaimeta@70e063a35619d71f
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
   function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
   function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == typeof i ? i : i + ""; }
@@ -186,33 +205,29 @@
   const __COLOCATED_TEMPLATE__ = (0, _templateFactory.createTemplateFactory)(
   /*
     <div>
-      <span>What have to you do?</span>
-      <span>You have to do {{this.arrThing.length}} things</span>
-          <div class="search" >
-              <Input @value={{this.query}} class="light" maxlength="250" /> 
-              <button {{on 'click' this.conditional}}{{on 'click' this.print}} type="button">submit</button>
+    <span>What have to you do?</span>
+    <span>You have to do {{this.numberOfThings2}} things</span>
+    <div class="search">
+      <Input @value={{this.query}} class="light" maxlength="250" />
+      <button {{on "click" this.create}} type="button">submit</button>
   
-                          
-          </div>
-         
+    </div>
+  
   </div>
   
   <div class="block">
-      {{#each this.arrThing as |thing|}}
-          <button type="button" class="buttonT" id={{thing.id}} {{on 'click' (fn this.changeStatus thing.id)}}{{on 'click' this.conditional}}{{on 'click' this.print}}>
-              <input type="checkbox" name="" id="input" checked={{thing.status}}>
-              <p class="{{if thing.status "through"}}">{{thing.name}}</p>
-          </button>
-      {{/each}}
+    {{#each this.arrThing as |thing|}}
+      <ButtonThing @onDoThing={{this.doThing}} @thing={{thing}} />
+    {{/each}}
   </div>
   <div class="blockH">
-      <button type="button" class="buttonT" {{on 'click' this.removeAll}}>Delete All</button>
+    <button type="button" class="buttonT" {{on "click" this.removeAll}}>Delete All</button>
   
   </div>
   */
   {
-    "id": "6aafYD9Z",
-    "block": "[[[10,0],[12],[1,\"\\n    \"],[10,1],[12],[1,\"What have to you do?\"],[13],[1,\"\\n    \"],[10,1],[12],[1,\"You have to do \"],[1,[30,0,[\"arrThing\",\"length\"]]],[1,\" things\"],[13],[1,\"\\n        \"],[10,0],[14,0,\"search\"],[12],[1,\"\\n            \"],[8,[39,2],[[24,0,\"light\"],[24,\"maxlength\",\"250\"]],[[\"@value\"],[[30,0,[\"query\"]]]],null],[1,\" \\n            \"],[11,\"button\"],[24,4,\"button\"],[4,[38,4],[\"click\",[30,0,[\"conditional\"]]],null],[4,[38,4],[\"click\",[30,0,[\"print\"]]],null],[12],[1,\"submit\"],[13],[1,\"\\n\\n                        \\n        \"],[13],[1,\"\\n       \\n\"],[13],[1,\"\\n\\n\"],[10,0],[14,0,\"block\"],[12],[1,\"\\n\"],[42,[28,[37,6],[[28,[37,6],[[30,0,[\"arrThing\"]]],null]],null],null,[[[1,\"        \"],[11,\"button\"],[24,0,\"buttonT\"],[16,1,[30,1,[\"id\"]]],[24,4,\"button\"],[4,[38,4],[\"click\",[28,[37,7],[[30,0,[\"changeStatus\"]],[30,1,[\"id\"]]],null]],null],[4,[38,4],[\"click\",[30,0,[\"conditional\"]]],null],[4,[38,4],[\"click\",[30,0,[\"print\"]]],null],[12],[1,\"\\n            \"],[10,\"input\"],[14,3,\"\"],[14,1,\"input\"],[15,\"checked\",[30,1,[\"status\"]]],[14,4,\"checkbox\"],[12],[13],[1,\"\\n            \"],[10,2],[15,0,[29,[[52,[30,1,[\"status\"]],\"through\"]]]],[12],[1,[30,1,[\"name\"]]],[13],[1,\"\\n        \"],[13],[1,\"\\n\"]],[1]],null],[13],[1,\"\\n\"],[10,0],[14,0,\"blockH\"],[12],[1,\"\\n    \"],[11,\"button\"],[24,0,\"buttonT\"],[24,4,\"button\"],[4,[38,4],[\"click\",[30,0,[\"removeAll\"]]],null],[12],[1,\"Delete All\"],[13],[1,\"\\n\\n\"],[13]],[\"thing\"],false,[\"div\",\"span\",\"input\",\"button\",\"on\",\"each\",\"-track-array\",\"fn\",\"p\",\"if\"]]",
+    "id": "P2g3EpCz",
+    "block": "[[[10,0],[12],[1,\"\\n  \"],[10,1],[12],[1,\"What have to you do?\"],[13],[1,\"\\n  \"],[10,1],[12],[1,\"You have to do \"],[1,[30,0,[\"numberOfThings2\"]]],[1,\" things\"],[13],[1,\"\\n  \"],[10,0],[14,0,\"search\"],[12],[1,\"\\n    \"],[8,[39,2],[[24,0,\"light\"],[24,\"maxlength\",\"250\"]],[[\"@value\"],[[30,0,[\"query\"]]]],null],[1,\"\\n    \"],[11,\"button\"],[24,4,\"button\"],[4,[38,4],[\"click\",[30,0,[\"create\"]]],null],[12],[1,\"submit\"],[13],[1,\"\\n\\n  \"],[13],[1,\"\\n\\n\"],[13],[1,\"\\n\\n\"],[10,0],[14,0,\"block\"],[12],[1,\"\\n\"],[42,[28,[37,6],[[28,[37,6],[[30,0,[\"arrThing\"]]],null]],null],null,[[[1,\"    \"],[8,[39,7],null,[[\"@onDoThing\",\"@thing\"],[[30,0,[\"doThing\"]],[30,1]]],null],[1,\"\\n\"]],[1]],null],[13],[1,\"\\n\"],[10,0],[14,0,\"blockH\"],[12],[1,\"\\n  \"],[11,\"button\"],[24,0,\"buttonT\"],[24,4,\"button\"],[4,[38,4],[\"click\",[30,0,[\"removeAll\"]]],null],[12],[1,\"Delete All\"],[13],[1,\"\\n\\n\"],[13]],[\"thing\"],false,[\"div\",\"span\",\"input\",\"button\",\"on\",\"each\",\"-track-array\",\"button-thing\"]]",
     "moduleName": "to-do-list/components/list.hbs",
     "isStrictMode": false
   });
@@ -224,16 +239,28 @@
     constructor(owner, args) {
       super(owner, args);
       _defineProperty(this, "debugger", void 0);
-      _defineProperty(this, "hola", 'hola');
-      _initializerDefineProperty(this, "arrThing", _descriptor, this);
-      _initializerDefineProperty(this, "query", _descriptor2, this);
+      _initializerDefineProperty(this, "local", _descriptor, this);
+      _defineProperty(this, "hola", "hola");
+      _initializerDefineProperty(this, "arrThing", _descriptor2, this);
+      _initializerDefineProperty(this, "query", _descriptor3, this);
       //Quuiero vaciar después la query, como?? otra vez seleccionando el id del input y vaciandolo?
-      _initializerDefineProperty(this, "statusCkd", _descriptor3, this);
+      _initializerDefineProperty(this, "numberOfThings2", _descriptor4, this);
       this.conditional();
       this.print();
+      this.calculate();
+    }
+    create() {
+      this.conditional();
+      this.print();
+      this.calculate();
+    }
+    doThing(idThing) {
+      this.changeStatus(idThing);
+      this.conditional();
+      this.calculate();
     }
     conditional() {
-      let local = JSON.parse(localStorage.getItem('listOfThing')); //servcio para el localStorage
+      let local = JSON.parse(localStorage.getItem("listOfThing")); //servcio para el localStorage
       if (local != null) {
         this.arrThing = [...local];
       }
@@ -246,52 +273,68 @@
         //uso var por que let solo me lo reconoce dentro del bloque if
       }
       if (this.arrThing.length != 0) {
-        if (thing.name != null && thing.name != '') {
+        if (thing.name != null && thing.name != "") {
           this.arrThing = [...this.arrThing, thing];
         }
       } else {
-        if (thing.name != null && thing.name != '') {
+        if (thing.name != null && thing.name != "") {
           this.arrThing = [thing];
         }
       }
-      localStorage.setItem('listOfThing', JSON.stringify(this.arrThing));
+      console.log("a print llega");
+      localStorage.setItem("listOfThing", JSON.stringify(this.arrThing));
     }
-    changeStatus(alberto) {
+    changeStatus(idThing) {
       //localizamos el elemento con event.target
-      const index = this.arrThing.findIndex(x => x.id === alberto);
+      const index = this.arrThing.findIndex(x => x.id === idThing);
       this.arrThing[index].status = !this.arrThing[index].status;
       //cunando coge los estados del boton y demas es por que coge las propiedades del último thing creado
       //este thing no es el thing que al pulsar en el boton quiero, tengo que aberiguar como obtenerlo
-
-      localStorage.setItem('listOfThing', JSON.stringify(this.arrThing));
+      localStorage.setItem("listOfThing", JSON.stringify(this.arrThing));
     }
     removeAll() {
       this.arrThing = [];
-      localStorage.setItem('listOfThing', JSON.stringify(this.arrThing));
+      localStorage.setItem("listOfThing", JSON.stringify(this.arrThing));
       this.conditional();
       this.print();
-      console.log('remove');
+      this.calculate();
+      console.log("remove");
     }
-  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "arrThing", [_tracking.tracked], {
+    calculate() {
+      this.numberOfThings = this.arrThing.length;
+      let i = 0;
+      this.arrThing.forEach(x => {
+        if (x.status == true) {
+          i++;
+        }
+      });
+      console.log(i);
+      this.numberOfThings2 = this.numberOfThings - i;
+      return this.numberOfThings2;
+    }
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "local", [_service.inject], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "arrThing", [_tracking.tracked], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return [];
     }
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "query", [_tracking.tracked], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "query", [_tracking.tracked], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "statusCkd", [_tracking.tracked], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "numberOfThings2", [_tracking.tracked], {
     configurable: true,
     enumerable: true,
     writable: true,
-    initializer: function () {
-      return document.getElementById('input').checked;
-    }
-  }), _applyDecoratedDescriptor(_class.prototype, "conditional", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "conditional"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "print", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "print"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "changeStatus", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "changeStatus"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "removeAll", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "removeAll"), _class.prototype)), _class);
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "create", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "create"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "doThing", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "doThing"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "conditional", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "conditional"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "print", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "print"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "changeStatus", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "changeStatus"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "removeAll", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "removeAll"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "calculate", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "calculate"), _class.prototype)), _class);
   (0, _component.setComponentTemplate)(__COLOCATED_TEMPLATE__, ListComponent);
 });
 ;define("to-do-list/components/welcome-page", ["exports", "ember-welcome-page/components/welcome-page"], function (_exports, _welcomePage) {
@@ -497,6 +540,24 @@
   }
   _exports.default = ApplicationRoute;
 });
+;define("to-do-list/services/local", ["exports", "@ember/service"], function (_exports, _service) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+  0; //eaimeta@70e063a35619d71f0,"@ember/service"eaimeta@70e063a35619d71f
+  class LocalService extends _service.default {
+    getStorage() {
+      return JSON.parse(localStorage.getItem("listOfThing"));
+    }
+    setStorage(arrThing) {
+      localStorage.setItem("listOfThing", JSON.stringify(arrThing));
+    }
+  }
+  _exports.default = LocalService;
+});
 ;define("to-do-list/services/page-title", ["exports", "ember-page-title/services/page-title"], function (_exports, _pageTitle) {
   "use strict";
 
@@ -679,7 +740,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("to-do-list/app")["default"].create({"name":"to-do-list","version":"0.0.0"});
+            require("to-do-list/app")["default"].create({"name":"to-do-list","version":"0.0.0+239e51de"});
           }
         
 //# sourceMappingURL=to-do-list.map

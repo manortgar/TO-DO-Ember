@@ -1,7 +1,8 @@
-import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
-import Thing from '../objects/thing';
+import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
+import { action } from "@ember/object";
+import Thing from "../objects/thing";
+import { inject as service } from "@ember/service";
 
 export default class ListComponent extends Component {
   debugger;
@@ -14,9 +15,13 @@ export default class ListComponent extends Component {
     super(owner, args);
     this.conditional();
     this.print();
+    this.calculate();
   }
 
-  hola = 'hola';
+  @service
+  local;
+
+  hola = "hola";
 
   @tracked
   arrThing = [];
@@ -25,11 +30,25 @@ export default class ListComponent extends Component {
   query; //Quuiero vaciar después la query, como?? otra vez seleccionando el id del input y vaciandolo?
 
   @tracked
-  statusCkd = document.getElementById('input').checked;
+  numberOfThings2;
+
+  @action
+  create() {
+    this.conditional();
+    this.print();
+    this.calculate();
+  }
+
+  @action
+  doThing(idThing) {
+    this.changeStatus(idThing);
+    this.conditional();
+    this.calculate();
+  }
 
   @action
   conditional() {
-    let local = JSON.parse(localStorage.getItem('listOfThing')); //servcio para el localStorage
+    let local = JSON.parse(localStorage.getItem("listOfThing")); //servcio para el localStorage
     if (local != null) {
       this.arrThing = [...local];
     }
@@ -43,35 +62,49 @@ export default class ListComponent extends Component {
       //uso var por que let solo me lo reconoce dentro del bloque if
     }
     if (this.arrThing.length != 0) {
-      if (thing.name != null && thing.name != '') {
+      if (thing.name != null && thing.name != "") {
         this.arrThing = [...this.arrThing, thing];
       }
     } else {
-      if (thing.name != null && thing.name != '') {
+      if (thing.name != null && thing.name != "") {
         this.arrThing = [thing];
       }
     }
-
-    localStorage.setItem('listOfThing', JSON.stringify(this.arrThing));
+    console.log("a print llega");
+    localStorage.setItem("listOfThing", JSON.stringify(this.arrThing));
   }
 
   @action
-  changeStatus(alberto) {
+  changeStatus(idThing) {
     //localizamos el elemento con event.target
-    const index = this.arrThing.findIndex((x) => x.id === alberto);
+    const index = this.arrThing.findIndex((x) => x.id === idThing);
     this.arrThing[index].status = !this.arrThing[index].status;
     //cunando coge los estados del boton y demas es por que coge las propiedades del último thing creado
     //este thing no es el thing que al pulsar en el boton quiero, tengo que aberiguar como obtenerlo
-
-    localStorage.setItem('listOfThing', JSON.stringify(this.arrThing));
+    localStorage.setItem("listOfThing", JSON.stringify(this.arrThing));
   }
 
   @action
   removeAll() {
     this.arrThing = [];
-    localStorage.setItem('listOfThing', JSON.stringify(this.arrThing));
+    localStorage.setItem("listOfThing", JSON.stringify(this.arrThing));
     this.conditional();
     this.print();
-    console.log('remove');
+    this.calculate();
+    console.log("remove");
+  }
+
+  @action
+  calculate() {
+    this.numberOfThings = this.arrThing.length;
+    let i = 0;
+    this.arrThing.forEach((x) => {
+      if (x.status == true) {
+        i++;
+      }
+    });
+    console.log(i);
+    this.numberOfThings2 = this.numberOfThings - i;
+    return this.numberOfThings2;
   }
 }
