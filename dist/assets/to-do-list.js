@@ -219,19 +219,24 @@
   </div>
   
   <div class="block">
-    {{#each this.arrThing as |thing|}}
+    {{#each this.myTrackedArray as |thing|}}
       {{log thing}}
       <ButtonThing @thing={{thing}} @onDoThing={{this.toggleThing}} />
     {{/each}}
   </div>
   <div class="blockH">
     <button type="button" class="buttonT" {{on "click" this.removeAll}}>Delete All</button>
+    <button
+      type="button"
+      class="buttonT"
+      {{on "click" this.fillTrackedArray}}
+    >vamo a verlo</button>
   
   </div>
   */
   {
-    "id": "+7i22TiP",
-    "block": "[[[10,0],[12],[1,\"\\n  \"],[10,1],[12],[1,\"What have to you do?\"],[13],[1,\"\\n  \"],[10,1],[12],[1,\"You have to do \"],[1,[30,0,[\"numberOfThings2\"]]],[1,\" things\"],[13],[1,\"\\n  \"],[10,0],[14,0,\"search\"],[12],[1,\"\\n    \"],[8,[39,2],[[24,0,\"light\"],[24,\"maxlength\",\"250\"],[4,[38,3],[\"keydown\",[30,0,[\"enter\"]]],null]],[[\"@value\"],[[30,0,[\"query\"]]]],null],[1,\"\\n    \"],[11,\"button\"],[24,4,\"button\"],[4,[38,3],[\"click\",[30,0,[\"createThing\"]]],null],[12],[1,\"submit\"],[13],[1,\"\\n\\n  \"],[13],[1,\"\\n\\n\"],[13],[1,\"\\n\\n\"],[10,0],[14,0,\"block\"],[12],[1,\"\\n\"],[42,[28,[37,6],[[28,[37,6],[[30,0,[\"arrThing\"]]],null]],null],null,[[[1,\"    \"],[1,[54,[[30,1]]]],[1,\"\\n    \"],[8,[39,8],null,[[\"@thing\",\"@onDoThing\"],[[30,1],[30,0,[\"toggleThing\"]]]],null],[1,\"\\n\"]],[1]],null],[13],[1,\"\\n\"],[10,0],[14,0,\"blockH\"],[12],[1,\"\\n  \"],[11,\"button\"],[24,0,\"buttonT\"],[24,4,\"button\"],[4,[38,3],[\"click\",[30,0,[\"removeAll\"]]],null],[12],[1,\"Delete All\"],[13],[1,\"\\n\\n\"],[13]],[\"thing\"],false,[\"div\",\"span\",\"input\",\"on\",\"button\",\"each\",\"-track-array\",\"log\",\"button-thing\"]]",
+    "id": "Xsl9+yRK",
+    "block": "[[[10,0],[12],[1,\"\\n  \"],[10,1],[12],[1,\"What have to you do?\"],[13],[1,\"\\n  \"],[10,1],[12],[1,\"You have to do \"],[1,[30,0,[\"numberOfThings2\"]]],[1,\" things\"],[13],[1,\"\\n  \"],[10,0],[14,0,\"search\"],[12],[1,\"\\n    \"],[8,[39,2],[[24,0,\"light\"],[24,\"maxlength\",\"250\"],[4,[38,3],[\"keydown\",[30,0,[\"enter\"]]],null]],[[\"@value\"],[[30,0,[\"query\"]]]],null],[1,\"\\n    \"],[11,\"button\"],[24,4,\"button\"],[4,[38,3],[\"click\",[30,0,[\"createThing\"]]],null],[12],[1,\"submit\"],[13],[1,\"\\n\\n  \"],[13],[1,\"\\n\\n\"],[13],[1,\"\\n\\n\"],[10,0],[14,0,\"block\"],[12],[1,\"\\n\"],[42,[28,[37,6],[[28,[37,6],[[30,0,[\"myTrackedArray\"]]],null]],null],null,[[[1,\"    \"],[1,[54,[[30,1]]]],[1,\"\\n    \"],[8,[39,8],null,[[\"@thing\",\"@onDoThing\"],[[30,1],[30,0,[\"toggleThing\"]]]],null],[1,\"\\n\"]],[1]],null],[13],[1,\"\\n\"],[10,0],[14,0,\"blockH\"],[12],[1,\"\\n  \"],[11,\"button\"],[24,0,\"buttonT\"],[24,4,\"button\"],[4,[38,3],[\"click\",[30,0,[\"removeAll\"]]],null],[12],[1,\"Delete All\"],[13],[1,\"\\n  \"],[11,\"button\"],[24,0,\"buttonT\"],[24,4,\"button\"],[4,[38,3],[\"click\",[30,0,[\"fillTrackedArray\"]]],null],[12],[1,\"vamo a verlo\"],[13],[1,\"\\n\\n\"],[13]],[\"thing\"],false,[\"div\",\"span\",\"input\",\"on\",\"button\",\"each\",\"-track-array\",\"log\",\"button-thing\"]]",
     "moduleName": "to-do-list/components/list.hbs",
     "isStrictMode": false
   });
@@ -250,15 +255,18 @@
       //Quuiero vaciar después la query, como?? otra vez seleccionando el id del input y vaciandolo?
       _initializerDefineProperty(this, "numberOfThings2", _descriptor5, this);
       this.arrThing = this.args.model;
+      this.myTrackedArray = this.args.model;
       this.fillArray();
       this.calculateNumOfThings();
     }
     createThing() {
       this.fillArray();
+      this.fillTrackedArray();
       this.calculateNumOfThings();
     }
     toggleThing(idThing) {
-      this.changeStatus(idThing);
+      //this.changeStatus(idThing);
+      this.changeStatusTrack(idThing);
       this.calculateNumOfThings();
     }
     enter(event) {
@@ -285,6 +293,27 @@
       }
       this.local.setStorage(this.arrThing);
     }
+    //para que se ejecute desde el template la funcion
+    fillTrackedArray() {
+      var thing = new _thing.default(this.query, false);
+      if (this.query != null) {
+        thing.name = this.query;
+        //uso var por que let solo me lo reconoce dentro del bloque if
+        this.query = "";
+      }
+      if (this.myTrackedArray.length != 0) {
+        if (thing.name != null && thing.name != "") {
+          this.myTrackedArray = [...this.myTrackedArray, thing];
+        }
+      } else {
+        if (thing.name != null && thing.name != "") {
+          this.myTrackedArray = [thing];
+        }
+      }
+      console.log('EL TRACKED', this.myTrackedArray);
+      console.log('EL ARRAY', this.arrThing);
+      this.local.setStorageTrack(this.myTrackedArray);
+    }
     changeStatus(idThing) {
       //localizamos el elemento con event.target
       const index = this.arrThing.findIndex(x => x.id === idThing);
@@ -297,6 +326,19 @@
       //cunando coge los estados del boton y demas es por que coge las propiedades del último thing creado
       //este thing no es el thing que al pulsar en el boton quiero, tengo que aberiguar como obtenerlo
       this.local.setStorage(this.arrThing);
+    }
+    changeStatusTrack(idThing) {
+      //localizamos el elemento con event.target
+      const index = this.myTrackedArray.findIndex(x => x.id === idThing);
+      this.myTrackedArray[index].status = !this.myTrackedArray[index].status;
+      //console.log(this.myTrackedArray[index])
+
+      // this.myTrackedArray = this.myTrackedArray.map((x) => {
+      //   return { ...x };
+      // });
+      //cunando coge los estados del boton y demas es por que coge las propiedades del último thing creado
+      //este thing no es el thing que al pulsar en el boton quiero, tengo que aberiguar como obtenerlo
+      this.local.setStorageTrack(this.myTrackedArray);
     }
     removeAll() {
       this.query = "";
@@ -334,7 +376,7 @@
     enumerable: true,
     writable: true,
     initializer: function () {
-      return [];
+      return [_thing.default];
     }
   }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "query", [_tracking.tracked], {
     configurable: true,
@@ -346,7 +388,7 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "createThing", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "createThing"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "toggleThing", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "toggleThing"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "enter", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "enter"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fillArray", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "fillArray"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "changeStatus", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "changeStatus"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "removeAll", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "removeAll"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "calculateNumOfThings", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "calculateNumOfThings"), _class.prototype)), _class);
+  }), _applyDecoratedDescriptor(_class.prototype, "createThing", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "createThing"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "toggleThing", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "toggleThing"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "enter", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "enter"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fillArray", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "fillArray"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fillTrackedArray", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "fillTrackedArray"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "changeStatus", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "changeStatus"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "changeStatusTrack", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "changeStatusTrack"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "removeAll", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "removeAll"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "calculateNumOfThings", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "calculateNumOfThings"), _class.prototype)), _class);
   (0, _component.setComponentTemplate)(__COLOCATED_TEMPLATE__, ListComponent);
 });
 ;define("to-do-list/components/welcome-page", ["exports", "ember-welcome-page/components/welcome-page"], function (_exports, _welcomePage) {
@@ -588,6 +630,9 @@
     setStorage(arrThing) {
       localStorage.setItem("listOfThing", JSON.stringify(arrThing));
     }
+    setStorageTrack(arrThing) {
+      localStorage.setItem("listOfThing", JSON.stringify(arrThing));
+    }
   }
   _exports.default = LocalService;
 });
@@ -772,7 +817,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("to-do-list/app")["default"].create({"name":"to-do-list","version":"0.0.0+db4be996"});
+            require("to-do-list/app")["default"].create({"name":"to-do-list","version":"0.0.0+00237143"});
           }
         
 //# sourceMappingURL=to-do-list.map

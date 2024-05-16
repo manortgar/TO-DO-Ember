@@ -15,12 +15,17 @@
 </div>
 
 <div class="block">
-  {{#each this.arrThing as |thing|}}
+  {{#each this.myTrackedArray as |thing|}}
     {{log thing}}
     <ButtonThing @thing={{thing}} @onDoThing={{this.toggleThing}} />
   {{/each}}
 </div>
 <div class="blockH">
   <button type="button" class="buttonT" {{on "click" this.removeAll}}>Delete All</button>
+  <button
+    type="button"
+    class="buttonT"
+    {{on "click" this.fillTrackedArray}}
+  >vamo a verlo</button>
 
 </div>
