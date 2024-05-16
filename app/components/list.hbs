@@ -2,8 +2,13 @@
   <span>What have to you do?</span>
   <span>You have to do {{this.numberOfThings2}} things</span>
   <div class="search">
-    <Input @value={{this.query}} class="light" maxlength="250" />
-    <button {{on "click" this.create}} type="button">submit</button>
+    <Input
+      @value={{this.query}}
+      class="light"
+      maxlength="250"
+      {{on "keydown" this.enter}}
+    />
+    <button {{on "click" this.createThing}} type="button">submit</button>
 
   </div>
 
@@ -11,7 +16,8 @@
 
 <div class="block">
   {{#each this.arrThing as |thing|}}
-    <ButtonThing @onDoThing={{this.doThing}} @thing={{thing}} />
+    {{log thing}}
+    <ButtonThing @thing={{thing}} @onDoThing={{this.toggleThing}} />
   {{/each}}
 </div>
 <div class="blockH">
