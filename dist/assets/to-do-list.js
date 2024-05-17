@@ -219,24 +219,19 @@
   </div>
   
   <div class="block">
-    {{#each this.myTrackedArray as |thing|}}
-      {{log thing}}
+    {{#each this.finalArr as |thing|}}
+      {{log "log desde HBS" thing.name thing.status}}
       <ButtonThing @thing={{thing}} @onDoThing={{this.toggleThing}} />
     {{/each}}
   </div>
   <div class="blockH">
     <button type="button" class="buttonT" {{on "click" this.removeAll}}>Delete All</button>
-    <button
-      type="button"
-      class="buttonT"
-      {{on "click" this.fillTrackedArray}}
-    >vamo a verlo</button>
   
   </div>
   */
   {
-    "id": "Xsl9+yRK",
-    "block": "[[[10,0],[12],[1,\"\\n  \"],[10,1],[12],[1,\"What have to you do?\"],[13],[1,\"\\n  \"],[10,1],[12],[1,\"You have to do \"],[1,[30,0,[\"numberOfThings2\"]]],[1,\" things\"],[13],[1,\"\\n  \"],[10,0],[14,0,\"search\"],[12],[1,\"\\n    \"],[8,[39,2],[[24,0,\"light\"],[24,\"maxlength\",\"250\"],[4,[38,3],[\"keydown\",[30,0,[\"enter\"]]],null]],[[\"@value\"],[[30,0,[\"query\"]]]],null],[1,\"\\n    \"],[11,\"button\"],[24,4,\"button\"],[4,[38,3],[\"click\",[30,0,[\"createThing\"]]],null],[12],[1,\"submit\"],[13],[1,\"\\n\\n  \"],[13],[1,\"\\n\\n\"],[13],[1,\"\\n\\n\"],[10,0],[14,0,\"block\"],[12],[1,\"\\n\"],[42,[28,[37,6],[[28,[37,6],[[30,0,[\"myTrackedArray\"]]],null]],null],null,[[[1,\"    \"],[1,[54,[[30,1]]]],[1,\"\\n    \"],[8,[39,8],null,[[\"@thing\",\"@onDoThing\"],[[30,1],[30,0,[\"toggleThing\"]]]],null],[1,\"\\n\"]],[1]],null],[13],[1,\"\\n\"],[10,0],[14,0,\"blockH\"],[12],[1,\"\\n  \"],[11,\"button\"],[24,0,\"buttonT\"],[24,4,\"button\"],[4,[38,3],[\"click\",[30,0,[\"removeAll\"]]],null],[12],[1,\"Delete All\"],[13],[1,\"\\n  \"],[11,\"button\"],[24,0,\"buttonT\"],[24,4,\"button\"],[4,[38,3],[\"click\",[30,0,[\"fillTrackedArray\"]]],null],[12],[1,\"vamo a verlo\"],[13],[1,\"\\n\\n\"],[13]],[\"thing\"],false,[\"div\",\"span\",\"input\",\"on\",\"button\",\"each\",\"-track-array\",\"log\",\"button-thing\"]]",
+    "id": "QkV9J66/",
+    "block": "[[[10,0],[12],[1,\"\\n  \"],[10,1],[12],[1,\"What have to you do?\"],[13],[1,\"\\n  \"],[10,1],[12],[1,\"You have to do \"],[1,[30,0,[\"numberOfThings2\"]]],[1,\" things\"],[13],[1,\"\\n  \"],[10,0],[14,0,\"search\"],[12],[1,\"\\n    \"],[8,[39,2],[[24,0,\"light\"],[24,\"maxlength\",\"250\"],[4,[38,3],[\"keydown\",[30,0,[\"enter\"]]],null]],[[\"@value\"],[[30,0,[\"query\"]]]],null],[1,\"\\n    \"],[11,\"button\"],[24,4,\"button\"],[4,[38,3],[\"click\",[30,0,[\"createThing\"]]],null],[12],[1,\"submit\"],[13],[1,\"\\n\\n  \"],[13],[1,\"\\n\\n\"],[13],[1,\"\\n\\n\"],[10,0],[14,0,\"block\"],[12],[1,\"\\n\"],[42,[28,[37,6],[[28,[37,6],[[30,0,[\"finalArr\"]]],null]],null],null,[[[1,\"    \"],[1,[54,[\"log desde HBS\",[30,1,[\"name\"]],[30,1,[\"status\"]]]]],[1,\"\\n    \"],[8,[39,8],null,[[\"@thing\",\"@onDoThing\"],[[30,1],[30,0,[\"toggleThing\"]]]],null],[1,\"\\n\"]],[1]],null],[13],[1,\"\\n\"],[10,0],[14,0,\"blockH\"],[12],[1,\"\\n  \"],[11,\"button\"],[24,0,\"buttonT\"],[24,4,\"button\"],[4,[38,3],[\"click\",[30,0,[\"removeAll\"]]],null],[12],[1,\"Delete All\"],[13],[1,\"\\n\\n\"],[13]],[\"thing\"],false,[\"div\",\"span\",\"input\",\"on\",\"button\",\"each\",\"-track-array\",\"log\",\"button-thing\"]]",
     "moduleName": "to-do-list/components/list.hbs",
     "isStrictMode": false
   });
@@ -248,24 +243,41 @@
     constructor(owner, args) {
       super(owner, args);
       _initializerDefineProperty(this, "myTrackedArray", _descriptor, this);
-      _initializerDefineProperty(this, "local", _descriptor2, this);
+      _initializerDefineProperty(this, "finalArr", _descriptor2, this);
+      // @tracked
+      // mySerializeTArr: TrackedArray<any>;
+      _initializerDefineProperty(this, "local", _descriptor3, this);
+      //servicios necesitan declare
       _defineProperty(this, "hola", "hola");
-      _initializerDefineProperty(this, "arrThing", _descriptor3, this);
       _initializerDefineProperty(this, "query", _descriptor4, this);
       //Quuiero vaciar después la query, como?? otra vez seleccionando el id del input y vaciandolo?
       _initializerDefineProperty(this, "numberOfThings2", _descriptor5, this);
-      this.arrThing = this.args.model;
-      this.myTrackedArray = this.args.model;
-      this.fillArray();
+      if (this.args.model) {
+        //args es un pbjeto plano, tengo que parsear cada Thing, forEach con un push en cada thing
+        //mirar en MDN Truthy falsy JS
+        this.myTrackedArray = new _trackedBuiltIns.TrackedArray();
+        this.finalArr = new _trackedBuiltIns.TrackedArray();
+        //this.mySerializeTArr = new TrackedArray();
+        this.args.model.forEach(x => {
+          console.log("esto es el name", x.name, "esto es el status", x.status);
+          let thingModel = new _thing.default(x.name, x.status);
+          thingModel.id = x.id;
+          this.finalArr.push(thingModel);
+          this.myTrackedArray.push(thingModel.serialize());
+        });
+      } else {
+        this.finalArr = new _trackedBuiltIns.TrackedArray();
+        this.myTrackedArray = new _trackedBuiltIns.TrackedArray();
+        this.local.setStorageTrack(this.myTrackedArray);
+      }
+      //this.fillTrackedArray();
       this.calculateNumOfThings();
     }
     createThing() {
-      this.fillArray();
       this.fillTrackedArray();
       this.calculateNumOfThings();
     }
     toggleThing(idThing) {
-      //this.changeStatus(idThing);
       this.changeStatusTrack(idThing);
       this.calculateNumOfThings();
     }
@@ -275,87 +287,50 @@
       }
     }
     //para que se ejecute desde el template la funcion
-    fillArray() {
-      var thing = new _thing.default(this.query, false);
-      if (this.query != null) {
-        thing.name = this.query;
-        //uso var por que let solo me lo reconoce dentro del bloque if
-        this.query = "";
-      }
-      if (this.arrThing.length != 0) {
-        if (thing.name != null && thing.name != "") {
-          this.arrThing = [...this.arrThing, thing];
-        }
-      } else {
-        if (thing.name != null && thing.name != "") {
-          this.arrThing = [thing];
-        }
-      }
-      this.local.setStorage(this.arrThing);
-    }
-    //para que se ejecute desde el template la funcion
     fillTrackedArray() {
+      //debugger
       var thing = new _thing.default(this.query, false);
-      if (this.query != null) {
+      if (this.query != null && this.query != "") {
         thing.name = this.query;
-        //uso var por que let solo me lo reconoce dentro del bloque if
+        this.finalArr.push(thing);
+        const serialize = thing.serialize();
+        this.myTrackedArray.push(serialize);
         this.query = "";
       }
-      if (this.myTrackedArray.length != 0) {
-        if (thing.name != null && thing.name != "") {
-          this.myTrackedArray = [...this.myTrackedArray, thing];
-        }
-      } else {
-        if (thing.name != null && thing.name != "") {
-          this.myTrackedArray = [thing];
-        }
-      }
-      console.log('EL TRACKED', this.myTrackedArray);
-      console.log('EL ARRAY', this.arrThing);
+      console.log("array serializada", this.myTrackedArray);
       this.local.setStorageTrack(this.myTrackedArray);
-    }
-    changeStatus(idThing) {
-      //localizamos el elemento con event.target
-      const index = this.arrThing.findIndex(x => x.id === idThing);
-      this.arrThing[index].status = !this.arrThing[index].status;
-      this.arrThing = this.arrThing.map(x => {
-        return {
-          ...x
-        };
-      });
-      //cunando coge los estados del boton y demas es por que coge las propiedades del último thing creado
-      //este thing no es el thing que al pulsar en el boton quiero, tengo que aberiguar como obtenerlo
-      this.local.setStorage(this.arrThing);
     }
     changeStatusTrack(idThing) {
       //localizamos el elemento con event.target
-      const index = this.myTrackedArray.findIndex(x => x.id === idThing);
-      this.myTrackedArray[index].status = !this.myTrackedArray[index].status;
-      //console.log(this.myTrackedArray[index])
+      //debugger
 
-      // this.myTrackedArray = this.myTrackedArray.map((x) => {
-      //   return { ...x };
-      // });
-      //cunando coge los estados del boton y demas es por que coge las propiedades del último thing creado
-      //este thing no es el thing que al pulsar en el boton quiero, tengo que aberiguar como obtenerlo
+      const index = this.finalArr.findIndex(x => x.id === idThing);
+      console.log("esto es index", index);
+      let bb = this.finalArr[index];
+      console.log("esto es objeto antes de cambiar estado", bb?.status);
+      this.finalArr[index].status = !this.finalArr[index]?.status;
+      let bb2 = this.finalArr[index];
+      console.log("esto es objeto DESPUES de cambiar estado", bb2?.status);
+      this.myTrackedArray[index] = this.finalArr[index]?.serialize();
       this.local.setStorageTrack(this.myTrackedArray);
     }
     removeAll() {
       this.query = "";
-      this.arrThing = [];
-      this.local.setStorage(this.arrThing);
+      this.myTrackedArray = new _trackedBuiltIns.TrackedArray();
+      this.finalArr = new _trackedBuiltIns.TrackedArray();
+      console.log(this.myTrackedArray);
+      this.local.setStorage(this.myTrackedArray);
       this.calculateNumOfThings();
       console.log("remove");
     }
     calculateNumOfThings() {
-      var numberOfThings = this.arrThing.length;
+      var numberOfThings = this.myTrackedArray.length;
       let i = 0;
-      this.arrThing.forEach(x => {
+      this.myTrackedArray.forEach(x => {
         if (x.status == true) {
           i++;
         }
       });
-      console.log(i);
       this.numberOfThings2 = numberOfThings - i;
       return this.numberOfThings2;
     }
@@ -363,21 +338,17 @@
     configurable: true,
     enumerable: true,
     writable: true,
-    initializer: function () {
-      return new _trackedBuiltIns.TrackedArray();
-    }
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "local", [_service.inject], {
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "finalArr", [_tracking.tracked], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "arrThing", [_tracking.tracked], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "local", [_service.inject], {
     configurable: true,
     enumerable: true,
     writable: true,
-    initializer: function () {
-      return [_thing.default];
-    }
+    initializer: null
   }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "query", [_tracking.tracked], {
     configurable: true,
     enumerable: true,
@@ -388,7 +359,7 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "createThing", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "createThing"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "toggleThing", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "toggleThing"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "enter", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "enter"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fillArray", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "fillArray"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fillTrackedArray", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "fillTrackedArray"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "changeStatus", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "changeStatus"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "changeStatusTrack", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "changeStatusTrack"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "removeAll", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "removeAll"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "calculateNumOfThings", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "calculateNumOfThings"), _class.prototype)), _class);
+  }), _applyDecoratedDescriptor(_class.prototype, "createThing", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "createThing"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "toggleThing", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "toggleThing"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "enter", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "enter"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fillTrackedArray", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "fillTrackedArray"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "changeStatusTrack", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "changeStatusTrack"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "removeAll", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "removeAll"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "calculateNumOfThings", [_object.action], Object.getOwnPropertyDescriptor(_class.prototype, "calculateNumOfThings"), _class.prototype)), _class);
   (0, _component.setComponentTemplate)(__COLOCATED_TEMPLATE__, ListComponent);
 });
 ;define("to-do-list/components/welcome-page", ["exports", "ember-welcome-page/components/welcome-page"], function (_exports, _welcomePage) {
@@ -541,28 +512,43 @@
     }
   };
 });
-;define("to-do-list/objects/thing", ["exports"], function (_exports) {
+;define("to-do-list/objects/thing", ["exports", "@glimmer/tracking"], function (_exports, _tracking) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
   _exports.default = void 0;
-  0; //eaimeta@70e063a35619d71feaimeta@70e063a35619d71f
+  var _class, _descriptor;
+  0; //eaimeta@70e063a35619d71f0,"@glimmer/tracking"eaimeta@70e063a35619d71f
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
   function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
   function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == typeof i ? i : i + ""; }
   function _toPrimitive(t, r) { if ("object" != typeof t || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != typeof i) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-  class Thing {
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'transform-class-properties is enabled and runs after the decorators transform.'); }
+  let Thing = _exports.default = (_class = class Thing {
     constructor(name, status) {
       _defineProperty(this, "id", void 0);
       _defineProperty(this, "name", void 0);
-      _defineProperty(this, "status", void 0);
+      _initializerDefineProperty(this, "status", _descriptor, this);
       this.id = self.crypto.randomUUID();
       this.name = name;
       this.status = status;
     }
-  }
-  _exports.default = Thing;
+    serialize() {
+      return {
+        id: this.id,
+        name: this.name,
+        status: this.status
+      };
+    }
+  }, (_descriptor = _applyDecoratedDescriptor(_class.prototype, "status", [_tracking.tracked], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class);
 });
 ;define("to-do-list/router", ["exports", "@ember/routing/router", "to-do-list/config/environment"], function (_exports, _router, _environment) {
   "use strict";
@@ -817,7 +803,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("to-do-list/app")["default"].create({"name":"to-do-list","version":"0.0.0+00237143"});
+            require("to-do-list/app")["default"].create({"name":"to-do-list","version":"0.0.0+3d908a8f"});
           }
         
 //# sourceMappingURL=to-do-list.map
